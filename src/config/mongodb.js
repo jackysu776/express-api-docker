@@ -9,7 +9,9 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
+  maxPoolSize: 10,
+  minPoolSize: 2,
 });
 
 let db = null;
