@@ -1,0 +1,17 @@
+{
+  "name": "express-docker-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongodb": "^7.0.0",
+    "mongoose": "^7.5.0"
+  }
+}
