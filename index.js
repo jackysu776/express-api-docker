@@ -26,12 +26,15 @@ let server;
 
 const startServer = async () => {
   try {
+    console.log('Starting server...');
     await connectMongoDB();
+    console.log('MongoDB connected, starting Express server...');
     server = app.listen(PORT, () => {
       console.log(`API running on port ${PORT}`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);
+    console.error('Full error details:', error.stack);
     process.exit(1);
   }
 };
