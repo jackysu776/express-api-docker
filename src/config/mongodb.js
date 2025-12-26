@@ -12,14 +12,24 @@ const client = new MongoClient(uri, {
   },
   maxPoolSize: 10,
   minPoolSize: 2,
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+  maxIdleTimeMS: 60000,
 });
 
 let db = null;
+let isConnected = false;
 
 const connectMongoDB = async () => {
+  if (isConnected && db) {
+    console.log('MongoDB already connected');
+    return db;
+  }
+
   try {
     console.log('Attempting to connect to MongoDB...');
     await client.connect();
+    isConnected = true;
     console.log('Connected to MongoDB server');
     
     await client.db("admin").command({ ping: 1 });
@@ -31,7 +41,8 @@ const connectMongoDB = async () => {
   } catch (error) {
     console.error("MongoDB connection error:", error.message);
     console.error("Full error:", error);
-    process.exit(1);
+    isConnected = false;
+    throw error;
   }
 };
 
