@@ -5,7 +5,7 @@ const { ObjectId } = require('mongodb');
 const register = async (req, res) => {
   try {
     const db = getDB();
-    const { username, password, email, name, role } = req.query;
+    const { username, password, email, name, role } = req.body;
 
     if (!username || !password || !email) {
         console.log('Missing fields:', { username, password, email });
@@ -64,7 +64,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const db = getDB();
-    const { username, password } = req.query;
+    const { username, password } = req.body;
 
     if (!username || !password) {
         return res.status(400).json({ message: 'Username and password required' });

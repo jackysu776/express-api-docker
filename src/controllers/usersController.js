@@ -29,8 +29,7 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const db = getDB();
-    const { name } = req.params;
-    const { role } = req.query;
+    const { name, role } = req.body;
     
     if (!name) {
       return res.status(400).json({ message: 'Name required' });
@@ -53,8 +52,8 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const db = getDB();
-    const { id, name } = req.params;
-    const { role } = req.query;
+    const { id } = req.params;
+    const { name, role } = req.body;
     
     const updateData = {};
     if (name) updateData.name = name;
