@@ -1,10 +1,8 @@
-const { getDB } = require('../config/mongodb');
-const { ObjectId } = require('mongodb');
+const usersService = require('../services/usersService');
 
 const getAllUsers = async (req, res) => {
   try {
-    const db = getDB();
-    const users = await db.collection('users').find({}).toArray();
+    const users = await usersService.getAllUsers();
     res.json(users);
   } catch (error) {
     console.error('Get all users error:', error);
@@ -14,81 +12,44 @@ const getAllUsers = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    const db = getDB();
-    const user = await db.collection('users').findOne({ _id: new ObjectId(req.params.id) });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    const user = await usersService.getUserById(req.params.id);
     res.json(user);
   } catch (error) {
     console.error('Get user by id error:', error);
-    res.status(500).json({ message: 'Failed to fetch user', error: error.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
 const createUser = async (req, res) => {
   try {
-    const db = getDB();
     const { name, role } = req.body;
-    
-    if (!name) {
-      return res.status(400).json({ message: 'Name required' });
-    }
-
-    const newUser = {
-      name,
-      role: role || 'user',
-      createdAt: new Date()
-    };
-
-    const result = await db.collection('users').insertOne(newUser);
-    res.status(201).json({ ...newUser, _id: result.insertedId });
+    const result = await usersService.createUser(name, role);
+    res.status(201).json(result);
   } catch (error) {
     console.error('Create user error:', error);
-    res.status(500).json({ message: 'Failed to create user', error: error.message });
+    res.status(400).json({ message: error.message });
   }
 };
 
 const updateUser = async (req, res) => {
   try {
-    const db = getDB();
     const { id } = req.params;
     const { name, role } = req.body;
-    
-    const updateData = {};
-    if (name) updateData.name = name;
-    if (role) updateData.role = role;
-
-    const result = await db.collection('users').findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      { $set: updateData },
-      { returnDocument: 'after' }
-    );
-
-    if (!result.value) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.json(result.value);
+    const result = await usersService.updateUser(id, name, role);
+    res.json(result);
   } catch (error) {
     console.error('Update user error:', error);
-    res.status(500).json({ message: 'Failed to update user', error: error.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
 const deleteUser = async (req, res) => {
   try {
-    const db = getDB();
-    const result = await db.collection('users').deleteOne({ _id: new ObjectId(req.params.id) });
-    
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.json({ message: 'User deleted successfully' });
+    const result = await usersService.deleteUser(req.params.id);
+    res.json(result);
   } catch (error) {
     console.error('Delete user error:', error);
-    res.status(500).json({ message: 'Failed to delete user', error: error.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
