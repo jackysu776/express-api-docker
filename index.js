@@ -2,6 +2,7 @@ const express = require('express');
 const { connectMongoDB, closeMongoDB } = require('./src/config/mongodb');
 const authRoutes = require('./src/routes/auth');
 const usersRoutes = require('./src/routes/users');
+const pushNotificationRoutes = require('./src/routes/pushNotification');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.get('/health', (req, res) => {
 
 app.use('/api', authRoutes);
 app.use('/api/users', usersRoutes);
+app.use('/api/push-notifications', pushNotificationRoutes);
 
 app.use((err, req, res, next) => {
   console.error('Global error:', err);
