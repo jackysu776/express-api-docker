@@ -7,6 +7,10 @@ try {
   if (process.env.FIREBASE_CONFIG) {
     // 如果環境變數中直接提供了 JSON 字符串
     serviceAccount = JSON.parse(process.env.FIREBASE_CONFIG);
+  } else if (process.env.FIREBASE_CONFIG_BASE64) {
+    // 如果環境變數中提供了 Base64 編碼的 JSON 字符串（推薦用於 Railway）
+    const decodedConfig = Buffer.from(process.env.FIREBASE_CONFIG_BASE64, 'base64').toString('utf-8');
+    serviceAccount = JSON.parse(decodedConfig);
   } else if (process.env.FIREBASE_CONFIG_PATH) {
     // 如果環境變數中提供了文件路徑
     serviceAccount = require(process.env.FIREBASE_CONFIG_PATH);
