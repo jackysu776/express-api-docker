@@ -95,6 +95,12 @@ const sendNotificationToMultipleDevices = async (deviceTokens, notification, dat
           },
         },
       },
+    };
+
+    const response = await admin.messaging().sendMulticast({
+      ...message,
+      tokens: deviceTokens,
+    });
 
     console.log(`Successfully sent notifications to ${response.successCount} devices`);
     console.log(`Failed to send to ${response.failureCount} devices`);
