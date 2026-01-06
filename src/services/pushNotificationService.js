@@ -39,7 +39,7 @@ const sendNotificationToDevice = async (deviceToken, notification, data = {}) =>
               body: notification.body,
             },
             sound: 'default',
-            badge: '1',
+            badge: 1,
           },
         },
       },
@@ -82,6 +82,7 @@ const sendNotificationToMultipleDevices = async (deviceTokens, notification, dat
           clickAction: data.clickAction || 'FLUTTER_NOTIFICATION_CLICK',
         },
       },
+      // iOS 特定配置
       apns: {
         payload: {
           aps: {
@@ -90,15 +91,10 @@ const sendNotificationToMultipleDevices = async (deviceTokens, notification, dat
               body: notification.body,
             },
             sound: 'default',
-            badge: '1',
+            badge: 1,
           },
         },
       },
-    };
-
-    const response = await admin.messaging().sendMulticast(message, {
-      tokens: deviceTokens,
-    });
 
     console.log(`Successfully sent notifications to ${response.successCount} devices`);
     console.log(`Failed to send to ${response.failureCount} devices`);
@@ -149,6 +145,7 @@ const sendNotificationToTopic = async (topic, notification, data = {}) => {
           clickAction: data.clickAction || 'FLUTTER_NOTIFICATION_CLICK',
         },
       },
+      // iOS 特定配置
       apns: {
         payload: {
           aps: {
@@ -157,7 +154,7 @@ const sendNotificationToTopic = async (topic, notification, data = {}) => {
               body: notification.body,
             },
             sound: 'default',
-            badge: '1',
+            badge: 1,
           },
         },
       },
